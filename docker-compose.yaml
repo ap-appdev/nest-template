@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  nest-template:
+    image: registry-dvs-test.hostco.ru/telemed/nest-template:1.0.0
+    ports:
+      - '3000:3000'
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      UTC_OFFSET: +05:00
