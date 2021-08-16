@@ -9,10 +9,10 @@ for /f "UseBackQ Delims=" %%A IN ("package.json") do (
 set registry_name=registry-dvs-test.hostco.ru
 set docker_image_name=telemed/nest-template
 
-@REM if "%docker_image_name%"=="telemed/nest-template" (
-@REM   echo [91m x [0m 'buildversion.bat' is not configured. Please specify {docker_image_name} parameter above
-@REM   exit /b 1
-@REM )
+if "%docker_image_name%"=="telemed/nest-template" (
+  echo [91m x [0m 'buildversion.bat' is not configured. Please specify {docker_image_name} parameter above
+  exit /b 1
+)
 
 echo Current version in 'package.json': [92m %a% [0m
 
@@ -26,10 +26,10 @@ if %errorlevel% neq 0 (
   exit /b %errorlevel%
 )
 
-@REM docker push %tag_name%
-@REM if %errorlevel% neq 0 (
-@REM   echo [91m x [0m Failed to push image to registry
-@REM   exit /b %errorlevel%
-@REM )
+docker push %tag_name%
+if %errorlevel% neq 0 (
+  echo [91m x [0m Failed to push image to registry
+  exit /b %errorlevel%
+)
 
 echo [92m v [0m Built and pushed a new image: [92m %tag_name% [0m
