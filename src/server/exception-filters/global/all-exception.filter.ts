@@ -66,7 +66,11 @@ export class AllExceptionsFilter implements ExceptionFilter {
       statusCode,
       timestamp: timeOfStart,
       path: req.originalUrl,
-      errorMessage: message,
+      error: {
+        name,
+        message,
+        stack,
+      },
     });
   }
 }
