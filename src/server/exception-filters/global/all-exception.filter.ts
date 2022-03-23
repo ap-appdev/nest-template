@@ -4,8 +4,10 @@ import {
   ArgumentsHost,
   HttpException,
   HttpStatus,
-  Logger,
+  Inject,
+  LoggerService,
 } from '@nestjs/common';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import * as moment from 'moment';
 import { ConfigService } from '@nestjs/config';
 
@@ -16,7 +18,8 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
   constructor(
     private configService: ConfigService,
-    private readonly logger: Logger,
+    @Inject(WINSTON_MODULE_NEST_PROVIDER)
+    private readonly logger: LoggerService,
   ) {
     this.npm_package_name = configService.get<string>('npm_package_name');
     this.npm_package_version = configService.get<string>('npm_package_version');

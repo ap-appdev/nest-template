@@ -5,11 +5,11 @@ import { V1Module } from '../local/v1/v1.module';
 import { RequestLoggerMiddleware } from '../../middlewares/global/request-logger.middleware';
 import { AllExceptionsFilter } from '../../exception-filters/global/all-exception.filter';
 import { ChangeResObjectInterceptor } from '../../interceptors/global/change-res-object.interceptor';
+import { WinstonLoggerModule } from '../global/logger/winston-logger.module';
 
 @Module({
-  imports: [ConfigurationModule, V1Module],
+  imports: [WinstonLoggerModule, ConfigurationModule, V1Module],
   providers: [
-    Logger,
     {
       provide: APP_INTERCEPTOR,
       useClass: ChangeResObjectInterceptor,

@@ -1,4 +1,10 @@
-import { Injectable, Logger, NestMiddleware } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  LoggerService,
+  NestMiddleware,
+} from '@nestjs/common';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { Request, NextFunction } from 'express';
 import * as moment from 'moment';
 import { ConfigService } from '@nestjs/config';
@@ -11,7 +17,8 @@ export class RequestLoggerMiddleware implements NestMiddleware {
 
   constructor(
     private configService: ConfigService,
-    private readonly logger: Logger,
+    @Inject(WINSTON_MODULE_NEST_PROVIDER)
+    private readonly logger: LoggerService,
   ) {
     this.npm_package_name = configService.get<string>('npm_package_name');
     this.npm_package_version = configService.get<string>('npm_package_version');

@@ -19,6 +19,10 @@ class ConfigurationtVariables {
   @IsOptional()
   NODE_ENV?: NODE_ENV;
 
+  @IsString()
+  @IsOptional()
+  LOG_MAX_SIZE_FILE: string;
+
   @IsNumber()
   PORT: number;
 
