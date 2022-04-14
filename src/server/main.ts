@@ -1,11 +1,11 @@
 import { NestFactory } from '@nestjs/core';
-import { RootModule } from './modules/root/root.module';
+import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { VersioningType, ValidationPipe } from '@nestjs/common';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 async function bootstrap() {
-  const app = await NestFactory.create(RootModule, {
+  const app = await NestFactory.create(AppModule, {
     bufferLogs: true,
     autoFlushLogs: true,
     abortOnError: false,

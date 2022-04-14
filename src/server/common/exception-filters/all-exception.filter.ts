@@ -7,14 +7,16 @@ import {
   Inject,
   LoggerService,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import * as moment from 'moment';
-import { ConfigService } from '@nestjs/config';
+import { Environment } from '../enums/environment';
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
   private readonly npm_package_name;
   private readonly npm_package_version;
+  private readonly node_env;
 
   constructor(
     private configService: ConfigService,
@@ -23,6 +25,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
   ) {
     this.npm_package_name = configService.get<string>('npm_package_name');
     this.npm_package_version = configService.get<string>('npm_package_version');
+    this.node_env = configService.get<string>('NODE_ENV');
   }
 
   catch(exception: Error, host: ArgumentsHost) {
@@ -69,11 +72,14 @@ export class AllExceptionsFilter implements ExceptionFilter {
       statusCode,
       timestamp: timeOfStart,
       path: req.originalUrl,
-      error: {
-        name,
-        message,
-        stack,
-      },
+      error:
+        this.node_env !== Environment.Production
+          ? {
+              name,
+              message,
+              stack,
+            }
+          : { name, message },
     });
   }
 }

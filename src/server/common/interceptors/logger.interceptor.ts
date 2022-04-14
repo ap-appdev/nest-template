@@ -1,17 +1,19 @@
 import {
-  Inject,
   Injectable,
+  NestInterceptor,
+  ExecutionContext,
+  CallHandler,
+  Inject,
   LoggerService,
-  NestMiddleware,
 } from '@nestjs/common';
-import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
-import { Request, NextFunction } from 'express';
-import * as moment from 'moment';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { ConfigService } from '@nestjs/config';
-import { Response } from '../../common/consts/express';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+import * as moment from 'moment';
 
 @Injectable()
-export class RequestLoggerMiddleware implements NestMiddleware {
+export class LoggerInterceptor implements NestInterceptor {
   private readonly npm_package_name;
   private readonly npm_package_version;
 
@@ -24,14 +26,16 @@ export class RequestLoggerMiddleware implements NestMiddleware {
     this.npm_package_version = configService.get<string>('npm_package_version');
   }
 
-  use(req: Request, res: Response, next: NextFunction): void {
+  intercept(execContext: ExecutionContext, next: CallHandler): Observable<any> {
     const timeOfStart = moment();
-
-    res.on('finish', () => {
-      if (res.statusCode < 400) {
+    const ctx = execContext.switchToHttp();
+    const req = ctx.getRequest();
+    const res = ctx.getResponse();
+    return next.handle().pipe(
+      tap((data) => {
         const { npm_package_name, npm_package_version } = this;
         const { method, originalUrl, headers, body: reqBody, params } = req;
-        const { statusCode, body: resBody } = res;
+        const { statusCode } = res;
         this.logger.log({
           message: {
             npm_package_name,
@@ -45,14 +49,12 @@ export class RequestLoggerMiddleware implements NestMiddleware {
             },
             res: {
               statusCode,
-              body: resBody,
+              body: data,
             },
             duration: moment().diff(timeOfStart),
           },
         });
-      }
-    });
-
-    next();
+      }),
+    );
   }
 }
