@@ -14,8 +14,8 @@ import * as moment from 'moment';
 
 @Injectable()
 export class LoggerInterceptor implements NestInterceptor {
-  private readonly npm_package_name;
-  private readonly npm_package_version;
+  private readonly npm_package_name: string;
+  private readonly npm_package_version: string;
 
   constructor(
     private configService: ConfigService,

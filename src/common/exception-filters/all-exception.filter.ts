@@ -14,9 +14,9 @@ import { Environment } from '../enums/environment';
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
-  private readonly npm_package_name;
-  private readonly npm_package_version;
-  private readonly node_env;
+  private readonly npm_package_name: string;
+  private readonly npm_package_version: string;
+  private readonly node_env: Environment;
 
   constructor(
     private configService: ConfigService,
@@ -25,7 +25,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
   ) {
     this.npm_package_name = configService.get<string>('npm_package_name');
     this.npm_package_version = configService.get<string>('npm_package_version');
-    this.node_env = configService.get<string>('NODE_ENV');
+    this.node_env = configService.get<Environment>('NODE_ENV');
   }
 
   catch(exception: Error, host: ArgumentsHost) {
