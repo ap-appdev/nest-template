@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { AppInterface } from './interfaces/app.interface';
 
 @Injectable()
 export class AppService {
@@ -11,7 +12,7 @@ export class AppService {
     this.npm_package_version = configService.get<string>('npm_package_version');
   }
 
-  getApp(): Record<string, any> {
+  get(): AppInterface {
     return {
       name: this.npm_package_name,
       version: this.npm_package_version,

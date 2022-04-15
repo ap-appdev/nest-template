@@ -10,7 +10,7 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import * as moment from 'moment';
-import { Environment } from '../enums/environment';
+import { Environment } from '../../common/enums/environment';
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {

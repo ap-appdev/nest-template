@@ -7,7 +7,7 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import { Environment } from '../../common/enums/environment';
+import { Environment } from '../../../common/enums/environment';
 
 class EnvironmentVariables {
   @IsEnum(Environment)
