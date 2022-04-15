@@ -9,7 +9,7 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
-  getApp(): Record<string, any> {
-    return this.appService.getApp();
+  get(): Record<string, any> {
+    return this.appService.get();
   }
 }
