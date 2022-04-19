@@ -8,6 +8,7 @@ import { validate } from './validations/env.validation';
       load: [],
       isGlobal: true,
       cache: true,
+      expandVariables: true,
       validate,
     }),
   ],

@@ -35,12 +35,15 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
     const timeOfStart = moment();
 
-    const statusCode =
-      exception instanceof HttpException
-        ? exception.getStatus()
-        : HttpStatus.INTERNAL_SERVER_ERROR;
+    let statusCode = HttpStatus.INTERNAL_SERVER_ERROR,
+      response: string | Record<any, any>;
 
     const { name, message, stack } = exception;
+    if (exception instanceof HttpException) {
+      statusCode = exception.getStatus();
+      response = exception.getResponse();
+    }
+
     res.on('finish', () => {
       const { npm_package_name, npm_package_version } = this;
       const { method, originalUrl, headers, body, params } = req;
@@ -55,7 +58,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
             body,
             params,
           },
-          res: {
+          res: response || {
             statusCode,
             error: {
               name,
@@ -68,18 +71,20 @@ export class AllExceptionsFilter implements ExceptionFilter {
       });
     });
 
-    res.status(statusCode).json({
-      statusCode,
-      timestamp: timeOfStart,
-      path: req.originalUrl,
-      error:
-        this.node_env !== Environment.Production
-          ? {
-              name,
-              message,
-              stack,
-            }
-          : { name, message },
-    });
+    res.status(statusCode).json(
+      response || {
+        statusCode,
+        timestamp: timeOfStart,
+        path: req.originalUrl,
+        error:
+          this.node_env !== Environment.Production
+            ? {
+                name,
+                message,
+                stack,
+              }
+            : { name, message },
+      },
+    );
   }
 }
