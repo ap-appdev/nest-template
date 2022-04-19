@@ -1,5 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
+import { AppInterface } from './interfaces/app.interface';
 
 @Controller({
   version: '1',
@@ -9,7 +10,7 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
-  get(): Record<string, any> {
+  get(): AppInterface {
     return this.appService.get();
   }
 }
