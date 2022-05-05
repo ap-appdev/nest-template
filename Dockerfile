@@ -1,4 +1,4 @@
-FROM registry-dvs-test.hostco.ru/node:14.17.3 As build
+FROM registry-dvs-test.hostco.ru/node:16-alpine As build
 
 RUN mkdir /build
 WORKDIR /build
@@ -16,7 +16,7 @@ RUN npm run build
 # node - 1.03GB
 # slim - 257.92MB
 # alpine - 207.49MB
-FROM registry-dvs-test.hostco.ru/node:14.17.3-alpine
+FROM registry-dvs-test.hostco.ru/node:16-alpine
 
 
 ENV NODE_ENV production
